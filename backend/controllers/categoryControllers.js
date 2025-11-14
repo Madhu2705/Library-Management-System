@@ -1,7 +1,6 @@
 import { categoryValidationSchema } from "../services/validation-service.js";
 import {
   ErrorHandlerService,
-  exportToCSV,
   paginationService,
 } from "../services/index.js";
 import CategoryModel from "../models/category-model.js";
@@ -97,24 +96,6 @@ class CategoryController {
     }
   }
 
-  async exportCategories(req, res, next) {
-    try {
-      const data = await CategoryModel.find();
-      console.log(data[0].bookCount);
-      if (data.length === 0) {
-        return next(ErrorHandlerService.notFound("Data not found"));
-      }
-      const columns = [
-        { header: "Name", key: "name" },
-        { header: "Descripton", key: "description" },
-        { header: "Total Books", key: "bookCount" },
-      ];
-      const fileName = "categories.csv";
-      exportToCSV(data, columns, fileName, res);
-    } catch (error) {
-      next(error);
-    }
-  }
 }
 
 export default new CategoryController();

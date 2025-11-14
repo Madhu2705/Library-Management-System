@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   deleteBook,
-  exportBooks,
   getAllBooks,
 } from "../../../http";
 
@@ -32,20 +31,6 @@ const ManageBook = () => {
     });
   };
 
-  const handleExport = () => {
-    const promise = exportBooks();
-    toast.promise(promise, {
-      loading: "Exporting...",
-      success: (response) => {
-        window.open(response?.data?.downloadUrl);
-        return "Books Exported successfully";
-      },
-      error: (err) => {
-        console.log(err);
-        return "Something went wrong while exporting data.";
-      },
-    });
-  };
 
   const fetchData = async () => {
     try {
@@ -89,9 +74,6 @@ const ManageBook = () => {
           >
             Add New
           </Link>
-          <button className="btn btn__secondary" onClick={handleExport}>
-            Export to CSV
-          </button>
         </div>
       </div>
 

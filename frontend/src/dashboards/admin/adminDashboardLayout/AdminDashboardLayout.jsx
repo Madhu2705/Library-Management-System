@@ -100,12 +100,6 @@ const menu = [
         icon: <FaBook />,
       },
       {
-        id: 4,
-        text: "EBooks",
-        link: "manage-ebooks",
-        icon: <FaBook />,
-      },
-      {
         id: 2,
         text: "Categories",
         link: "manage-categories",

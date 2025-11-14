@@ -1,10 +1,6 @@
 import AlmirahModel from "../models/almirah-model.js";
 import BookModel from "../models/book-model.js";
 import CategoryModel from "../models/category-model.js";
-import { ROOT_PATH } from "../server.js";
-import csv from "fast-csv";
-import fs from "fs";
-import { BASE_URL } from "../config/index.js";
 import deleteFile from "../services/delete-file-service.js";
 import {
   ErrorHandlerService,
@@ -25,15 +21,17 @@ class BookController {
           )
         );
       }
-      const filePath = req.files?.["image"]?.[0]?.path;
-      // console.log(filePath);
+      const uploadedFile = req.files?.["image"]?.[0];
+      const filePath = uploadedFile ? `uploads/${uploadedFile.filename}` : undefined;
+      console.log("Uploaded file:", uploadedFile);
+      console.log("File path to store:", filePath);
       /* REQUEST VALIDATION , IMAGE ALREADY UPLOADED */
       const { error } = bookValidationSchema.validate(req.body);
       if (error) {
         /* CHECK IF IMAGE UPLOADED THEN DELETED BECOZ VALIDATION FAILED */
-        if (filePath) {
+        if (uploadedFile && uploadedFile.path) {
           try {
-            deleteFile(filePath);
+            deleteFile(uploadedFile.path);
           } catch (error) {
             return next(error);
           }
@@ -45,8 +43,8 @@ class BookController {
         /* CHECK ISBN ALREADY EXIST ? ISBN SHOULD BE UNIQUE */
         const isExist = await BookModel.findOne({ ISBN: req.body.ISBN });
         if (isExist) {
-          if (filePath) {
-            deleteFile(filePath);
+          if (uploadedFile && uploadedFile.path) {
+            deleteFile(uploadedFile.path);
           }
           return next(
             ErrorHandlerService.validationError("ISBN Already exist")
@@ -133,13 +131,16 @@ class BookController {
       if (err) {
         return next(err);
       }
-      const filePath = req.files["image"]?.[0]?.path;
+      const uploadedFile = req.files?.["image"]?.[0];
+      const filePath = uploadedFile ? `uploads/${uploadedFile.filename}` : undefined;
       const { _id } = req.params;
       const { error } = bookValidationSchema.validate(req.body);
       if (error) {
         /*CHECK IMAGE UPLOAD? DELETE UPLOADED IMAGE */
         try {
-          filePath && deleteFile(filePath);
+          if (filePath && uploadedFile) {
+            deleteFile(uploadedFile.path);
+          }
         } catch (error) {
           next(error);
         }
@@ -150,7 +151,7 @@ class BookController {
         const document = await BookModel.findByIdAndUpdate(_id, req.body);
         console.log(document);
         /* CHECK NEW IMAGE IS UPLOADED THEN REMOVE OLD AND ADD NEW ONE */
-        if (filePath) {
+        if (filePath && uploadedFile) {
           const oldImage = document.imagePath;
           if (oldImage) {
             deleteFile(oldImage);
@@ -180,50 +181,6 @@ class BookController {
     }
   }
 
-  async exportBooks(req, res, next) {
-    try {
-      const data = await BookModel.find({ isDeleted: false })
-        .populate("category")
-        .populate("almirah");
-      if (data.length === 0) {
-        return next(ErrorHandlerService.notFound("Books not found"));
-      }
-
-      const csvStream = csv.format({ headers: true });
-      const filePath = `${ROOT_PATH}/public/files/export/books.csv`;
-      const writablestream = fs.createWriteStream(filePath);
-
-      csvStream.pipe(writablestream);
-
-      writablestream.on("finish", function () {
-        res.json({
-          downloadUrl: `${BASE_URL}/public/files/export/books.csv`,
-        });
-      });
-
-      if (data.length > 0) {
-        data.map((i, index) => {
-          csvStream.write({
-            SNo: index + 1,
-            ISBN: i.ISBN || "",
-            "Book Title": i.title || "-",
-            "Book Author": i.author || "-",
-            "Book Category": i.category.name || "-",
-            "Almirah Number": i.almirah.number || "-",
-            "Almirah Subject": i.almirah.subject || "-",
-            Shelf: i.shelf || "-",
-            Edition: i.edition || "-",
-            Publisher: i.publisher || "-",
-            "Image URL": i.imagePath || "-",
-          });
-        });
-      }
-      csvStream.end();
-      writablestream.end();
-    } catch (error) {
-      next(error);
-    }
-  }
 }
 
 export default new BookController();

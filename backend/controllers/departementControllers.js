@@ -2,10 +2,6 @@ import DepartementModel from "../models/departement-model.js";
 import UserModel from "../models/user-model.js";
 import { ErrorHandlerService, paginationService } from "../services/index.js";
 import { departementValidationSchema } from "../services/validation-service.js";
-import csv from "fast-csv";
-import fs from "fs";
-import { ROOT_PATH } from "../server.js";
-import { BASE_URL } from "../config/index.js";
 
 class DepartementController {
   async createDepartement(req, res, next) {
@@ -135,41 +131,6 @@ class DepartementController {
     }
   }
 
-  async exportDepartements(req, res, next) {
-    try {
-      const data = await DepartementModel.find().populate("hod");
-      if (data.length === 0) {
-        return next(ErrorHandlerService.notFound("Departements not found"));
-      }
-
-      const csvStream = csv.format({ headers: true });
-      const filePath = `${ROOT_PATH}/public/files/export/departements.csv`;
-      const writablestream = fs.createWriteStream(filePath);
-
-      csvStream.pipe(writablestream);
-
-      writablestream.on("finish", function () {
-        res.json({
-          downloadUrl: `${BASE_URL}/public/files/export/departements.csv`,
-        });
-      });
-
-      if (data.length > 0) {
-        data.map((i, index) => {
-          csvStream.write({
-            SNo: index + 1,
-            "Departement Name": i.name || "-",
-            "HOD NAME": i.hod.name || "-",
-            "HOD EMAIL": i.hod.email || "-",
-          });
-        });
-      }
-      csvStream.end();
-      writablestream.end();
-    } catch (error) {
-      next(error);
-    }
-  }
 }
 
 export default new DepartementController();

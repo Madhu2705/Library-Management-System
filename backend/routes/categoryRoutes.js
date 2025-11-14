@@ -10,7 +10,6 @@ categoryRouter.post("/",authMiddleware,adminMiddleware,categoryControllers.creat
 categoryRouter.get("/:_id",categoryControllers.getCategory);
 categoryRouter.put("/:_id",authMiddleware,adminMiddleware,categoryControllers.updateCateogry);
 categoryRouter.delete("/:_id",authMiddleware,adminMiddleware,categoryControllers.deleteCategory);
-categoryRouter.get("/files/export",authMiddleware,adminMiddleware,categoryControllers.exportCategories);
 
 
 export default categoryRouter;

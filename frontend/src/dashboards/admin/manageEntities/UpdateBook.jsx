@@ -42,7 +42,12 @@ const UpdateBook = () => {
     e.preventDefault();
     const dataToPost = new FormData();
     for (const key in formData) {
-      if (formData[key] !== "") {
+      // For file inputs, check if file exists, for other fields check if not empty
+      if (key === "image") {
+        if (formData[key] && formData[key] instanceof File) {
+          dataToPost.append(key, formData[key]);
+        }
+      } else if (formData[key] !== "") {
         dataToPost.append(key, formData[key]);
       }
     }

@@ -3,7 +3,6 @@ import {
   BASE_URL,
   addNewStudent,
   deleteStudent,
-  exportStudents,
   getAllStudents,
   updateStudent,
 } from "../../../http";
@@ -29,6 +28,7 @@ const ManageStudent = () => {
     rollNumber: "",
     departement: "",
     batch: "",
+    password: "",
   };
   const [formData, setFormData] = useState(initialState);
 
@@ -56,6 +56,7 @@ const ManageStudent = () => {
       rollNumber: formData.rollNumber,
       departement: formData.departement,
       batch: formData.batch,
+      password: formData.password,
     });
     toast.promise(promise, {
       loading: "Saving...",
@@ -112,20 +113,6 @@ const ManageStudent = () => {
     });
   };
 
-  const handleExport = () => {
-    const promise = exportStudents();
-    toast.promise(promise, {
-      loading: "Exporting...",
-      success: (response) => {
-        window.open(response?.data?.downloadUrl);
-        return "Students Exported successfully";
-      },
-      error: (err) => {
-        console.log(err);
-        return "Something went wrong while exporting data.";
-      },
-    });
-  };
 
   const fetchData = async () => {
     try {
@@ -173,9 +160,6 @@ const ManageStudent = () => {
             }}
           >
             Add New
-          </button>
-          <button className="btn btn__secondary" onClick={handleExport}>
-            Export to CSV
           </button>
         </div>
       </div>
@@ -354,6 +338,20 @@ const ManageStudent = () => {
               value={formData.email}
               onChange={handleChange}
               required
+            />
+          </div>
+
+          <div className="form-control">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              placeholder="Enter password (min 6 characters)"
+              name="password"
+              className="bg text__color"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              minLength={6}
             />
           </div>
 

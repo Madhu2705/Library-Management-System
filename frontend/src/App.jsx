@@ -6,10 +6,6 @@ import {
   BookReader,
   Books,
   ContactUs,
-  EBookDetail,
-  EBooks,
-  EmailSent,
-  ForgetPassword,
   Home,
   Login,
   NewPassword,
@@ -17,7 +13,6 @@ import {
 } from "./website";
 import {
   AddNewBook,
-  AddNewEBook,
   AdminDashboardLayout,
   AdminHome,
   BorrowedBooks,
@@ -30,7 +25,6 @@ import {
   ManageCategory,
   ManageClearanceRequest,
   ManageDepartement,
-  ManageEBook,
   ManageIssueBooks,
   ManageMessages,
   ManageRenewRequests,
@@ -41,7 +35,6 @@ import {
   ReturnedBookList,
   ReturnedBooks,
   UpdateBook,
-  UpdateEBook,
   UserDashboardLayout,
   UserDetail,
   UserHome,
@@ -85,11 +78,9 @@ const App = () => {
         <Route path="/" element={<WebsiteLayout />}>
           <Route index element={<Home />} />
           <Route path="books" element={<Books />} />
-          <Route path="ebooks" element={<EBooks />} />
           <Route path="contact-us" element={<ContactUs />} />
           <Route path="about-us" element={<AboutUs />} />
           <Route path="books/:_id" element={<BookDetail />} />
-          <Route path="ebooks/:_id" element={<EBookDetail />} />
         </Route>
         {/* ROUTE FOR READ BOOK ONLINE */}
         <Route path="/book-reader/uploads/:fileName" element={<BookReader />} />
@@ -97,8 +88,6 @@ const App = () => {
         <Route path="/login" element={<GuestRoutes />}>
           <Route index element={<Login />} />
         </Route>
-        <Route path="/forget-password" element={<ForgetPassword />} />
-        <Route path="/email-sent" element={<EmailSent />} />
         <Route path="/new-password/:token" element={<NewPassword />} />
 
         {/* Admin Protected Routes */}
@@ -118,11 +107,6 @@ const App = () => {
             <Route path="update-book/:_id" element={<UpdateBook />} />
             <Route path="manage-categories" element={<ManageCategory />} />
             <Route path="manage-almirahs" element={<ManageAlmirah />} />
-            {/* Manaage EBooks */}
-            <Route path="manage-ebooks" element={<ManageEBook />} />
-            <Route path="add-new-ebook" element={<AddNewEBook />} />
-            <Route path="update-ebook/:_id" element={<UpdateEBook />} />
-            <Route path="ebook-details/:_id" element={<EBookDetail />} />
             {/* Transactions Management */}
             <Route path="manage-issued-books" element={<ManageIssueBooks />} />
             <Route path="issue-book" element={<IssueBook />} />

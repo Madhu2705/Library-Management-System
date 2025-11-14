@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   addNewAlmirah,
-  exportAlmirahs,
   getAllAlmirahs,
   updateAlmirah,
 } from "../../../http";
@@ -81,20 +80,6 @@ const ManageAlmirah = () => {
     });
   };
 
-  const handleExport = () => {
-    const promise = exportAlmirahs();
-    toast.promise(promise, {
-      loading: "Exporting",
-      success: (response) => {
-        window.open(response?.data?.downloadUrl);
-        return "Exported successfully";
-      },
-      error: (err) => {
-        console.log(err);
-        return "Something went wrong while exporting data.";
-      },
-    });
-  };
 
   const fetchAlmirahs = async () => {
     try {
@@ -137,9 +122,6 @@ const ManageAlmirah = () => {
             }}
           >
             Add New
-          </button>
-          <button className="btn btn__secondary" onClick={handleExport}>
-            Export to CSV
           </button>
         </div>
       </div>

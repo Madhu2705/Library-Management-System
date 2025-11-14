@@ -8,7 +8,6 @@ const teacherRouter = Router();
 /* END POINTS */
 teacherRouter.get("/",authMiddleware,adminMiddleware,teacherControllers.getTeachers);
 teacherRouter.post("/",authMiddleware,adminMiddleware,teacherControllers.createTeacher);
-teacherRouter.get("/files/export",authMiddleware,adminMiddleware,teacherControllers.exportTeachers);
 teacherRouter.get("/:_id",authMiddleware,teacherControllers.getTeacher);
 teacherRouter.put("/:_id",authMiddleware,adminMiddleware,teacherControllers.updateTeacher);
 teacherRouter.delete("/:_id",authMiddleware,adminMiddleware,teacherControllers.deleteTeacher);

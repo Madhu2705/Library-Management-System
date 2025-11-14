@@ -1,6 +1,6 @@
 import AlmirahModel from "../models/almirah-model.js";
 import { almirahValidationSchema } from "../services/validation-service.js";
-import { ErrorHandlerService, exportToCSV, paginationService } from "../services/index.js";
+import { ErrorHandlerService, paginationService } from "../services/index.js";
 
 class AlmirahController {
   async createAlmirah(req, res, next) {
@@ -89,23 +89,6 @@ class AlmirahController {
     }
   }
 
-  async exportAlmirahs(req, res, next) {
-    try {
-        const data = await AlmirahModel.find();
-        if (data.length === 0) {
-          return next(ErrorHandlerService.notFound("Data not found"));
-        }
-        const columns = [
-          { header: "Subject", key: "subject" },
-          { header: "Almirah Number", key: "number" },
-          { header: "Total Books", key: "bookCount" },
-        ];
-        const fileName = "almirahs.csv";
-        exportToCSV(data, columns, fileName, res);
-      } catch (error) {
-          next(error);
-      }
-  }
 }
 
 export default new AlmirahController();

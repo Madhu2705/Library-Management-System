@@ -1,10 +1,7 @@
 import UserModel from "../models/user-model.js";
 import {
-  generateRandomPassword,
   ErrorHandlerService,
-  sendMail,
   paginationService,
-  exportToCSV,
 } from "../services/index.js";
 import { teacherValidationSchema } from "../services/validation-service.js";
 import bcrypt from "bcrypt";
@@ -24,10 +21,8 @@ class TeacherController {
         return next(ErrorHandlerService.alreadyExist("Email already exists"));
       }
 
-      /* GENRATE RANDOM PASSWORD */
-      const password = generateRandomPassword();
-      /* HASHED PASSWORD */
-      const hashedPassword = await bcrypt.hash(password, 10);
+      /* HASH PASSWORD PROVIDED BY ADMIN */
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
       /* SAVE INTO DATABASE */
       const teacher = new UserModel({
@@ -38,20 +33,6 @@ class TeacherController {
       await teacher.save();
 
       res.status(200).json({ teacher });
-
-      /* SEND WELCOME MAIL TO TEACHER AND ASK TO CHANGE THEIR PASSWORD */
-      await sendMail({
-        to: req.body.email,
-        subject: `Welcome to GGC Library Management System - Password Reset Required`,
-        text: `Dear ${req.body.name},
-                Welcome to the GGC Library Management System! Your account has been created by our admin.
-                Login Credentials:
-                Username/Email: ${req.body.email}
-                Default Password: ${password}
-                For security reasons, please reset your password immediately by login with above credentials.
-                Thank you for using GGC Library Management System.
-                `,
-      });
     } catch (error) {
       next(error);
     }
@@ -134,24 +115,6 @@ class TeacherController {
     }
   }
 
-  async exportTeachers(req, res, next) {
-    try {
-      const data = await UserModel.find({ role: "Teacher" });
-      if (data.length === 0) {
-        return next(ErrorHandlerService.notFound("Data not found"));
-      }
-      const columns = [
-        { header: "Name", key: "name" },
-        { header: "Father Name", key: "fatherName" },
-        { header: "Email", key: "email" },
-        { header: "Account Status", key: "accountStatus" },
-      ];
-      const fileName = "teachers.csv";
-      exportToCSV(data, columns, fileName, res);
-    } catch (error) {
-      next(error);
-    }
-  }
 }
 
 export default new TeacherController();

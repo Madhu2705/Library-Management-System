@@ -11,7 +11,6 @@ const departementRouter = Router();
 departementRouter.post("/",authMiddleware,adminMiddleware,departementControllers.createDepartement);
 departementRouter.put("/:_id",authMiddleware,adminMiddleware,departementControllers.updateDepartement);
 departementRouter.delete("/:_id",authMiddleware,adminMiddleware,departementControllers.deleteDepartement);
-departementRouter.get("/files/export",authMiddleware,adminMiddleware,departementControllers.exportDepartements);
 
 
 departementRouter.get("/",departementControllers.getDepartements);

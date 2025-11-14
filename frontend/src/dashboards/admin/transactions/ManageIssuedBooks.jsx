@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   ReturnBook,
-  exportBooks,
   getAllIssuedBooks,
   payFine,
 } from "../../../http";
@@ -20,20 +19,6 @@ const ManageIssueBooks = () => {
   const [showFineModal, setShowFineModal] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
-  const handleExport = () => {
-    const promise = exportBooks();
-    toast.promise(promise, {
-      loading: "Exporting...",
-      success: (response) => {
-        window.open(response?.data?.downloadUrl);
-        return "Books Exported successfully";
-      },
-      error: (err) => {
-        console.log(err);
-        return "Something went wrong while exporting data.";
-      },
-    });
-  };
 
   const fetchData = async () => {
     try {
@@ -130,9 +115,6 @@ const ManageIssueBooks = () => {
           >
             Issue Book
           </Link>
-          <button className="btn btn__secondary" onClick={handleExport}>
-            Export to CSV
-          </button>
         </div>
       </div>
 

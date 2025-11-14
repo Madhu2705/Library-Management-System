@@ -18,9 +18,6 @@ import UserDetail from "./admin/UserDetail/UserDetail";
 import ManageBook from "./admin/manageEntities/ManageBook";
 import AddNewBook from "./admin/manageEntities/AddNewBook";
 import UpdateBook from "./admin/manageEntities/UpdateBook";
-import ManageEBook from "./admin/manageEntities/ManageEBook";
-import AddNewEBook from "./admin/manageEntities/AddNewEBook";
-import UpdateEBook from "./admin/manageEntities/UpdateEBook";
 import ManageIssueBooks from "./admin/transactions/ManageIssuedBooks";
 import IssueBook from "./admin/transactions/IssueBook";
 import ReservedBookList from "./admin/transactions/ReservedBookList";
@@ -49,9 +46,6 @@ export {
     ManageBook,
     AddNewBook,
     UpdateBook,
-    ManageEBook,
-    AddNewEBook,
-    UpdateEBook,
     ManageIssueBooks,
     IssueBook,
     ReservedBookList,

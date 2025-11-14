@@ -47,11 +47,6 @@ const AdminHome = () => {
           count={data?.numberOfReservedBooks}
           link={"reserved-books-list"}
         />
-        <CountCard
-          heading={"Total Ebooks"}
-          count={data?.numberOfEBooks}
-          link={"manage-ebooks"}
-        />
       </div>
 
       {/* BAR AND PIE CHART */}

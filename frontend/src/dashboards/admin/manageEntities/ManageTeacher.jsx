@@ -3,7 +3,6 @@ import {
     BASE_URL,
   addNewTeacher,
   deleteTeacher,
-  exportTeachers,
   getAllTeachers,
   updateTeacher,
 } from "../../../http";
@@ -27,6 +26,7 @@ const ManageTeacher = () => {
     name: "",
     fatherName: "",
     email: "",
+    password: "",
   };
   const [formData, setFormData] = useState(initialState);
 
@@ -51,6 +51,7 @@ const ManageTeacher = () => {
       name: formData.name,
       fatherName: formData.fatherName,
       email: formData.email,
+      password: formData.password,
     });
     toast.promise(promise, {
       loading: "Saving...",
@@ -103,20 +104,6 @@ const ManageTeacher = () => {
     });
   };
 
-  const handleExport = () => {
-    const promise = exportTeachers();
-    toast.promise(promise, {
-      loading: "Exporting",
-      success: (response) => {
-        window.open(response?.data?.downloadUrl);
-        return "Exported successfully";
-      },
-      error: (err) => {
-        console.log(err);
-        return "Something went wrong while exporting data.";
-      },
-    });
-  };
 
   const fetchData = async () => {
     try {
@@ -159,9 +146,6 @@ const ManageTeacher = () => {
             }}
           >
             Add New
-          </button>
-          <button className="btn btn__secondary" onClick={handleExport}>
-            Export to CSV
           </button>
         </div>
       </div>
@@ -290,6 +274,20 @@ const ManageTeacher = () => {
               value={formData.email}
               onChange={handleChange}
               required
+            />
+          </div>
+
+          <div className="form-control">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              placeholder="Enter password (min 6 characters)"
+              name="password"
+              className="bg text__color"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              minLength={6}
             />
           </div>
           <div className="actions">

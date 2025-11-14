@@ -55,9 +55,6 @@ const Header = () => {
           <NavLink to="/books" className="text__color ">
             Books
           </NavLink>
-          <NavLink to="/ebooks" className="text__color ">
-            EBooks
-          </NavLink>
           <NavLink to="/about-us" className="text__color ">
             About Us
           </NavLink>
@@ -190,15 +187,6 @@ const Header = () => {
               className="text__color "
             >
               Books
-            </Link>
-            <Link
-              to="/ebooks"
-              onClick={() => {
-                setMobileMenuOpen(false);
-              }}
-              className="text__color "
-            >
-              eBooks
             </Link>
             <Link
               to="/about-us"

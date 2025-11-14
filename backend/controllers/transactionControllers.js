@@ -10,7 +10,6 @@ import {
 } from "../config/index.js";
 
 import BookModel from "../models/book-model.js";
-import EBookModel from "../models/ebook-model.js";
 import {
   FineModel,
   ReservationModel,
@@ -22,7 +21,6 @@ import {
   ErrorHandlerService,
   calculateFine,
   paginationService,
-  sendMail,
 } from "../services/index.js";
 import {
   issuedBookSchema,
@@ -37,7 +35,6 @@ class TransactionController {
       const [
         numberOfBorrowedBooks,
         numberOfAvailableBooks,
-        numberOfEBooks,
         numberOfReservedBooks,
         numberOfTotalBooks,
         last5ReturnedBooks,
@@ -47,7 +44,6 @@ class TransactionController {
           isBorrowed: true,
         }),
         BookModel.countDocuments({ status: "Available", isDeleted: "false" }),
-        EBookModel.countDocuments({}),
         ReservationModel.countDocuments({}),
         BookModel.countDocuments({ isDeleted: false }),
         TransactionModel.find({ isBorrowed: false })
@@ -117,7 +113,6 @@ class TransactionController {
         numberOfBorrowedBooks,
         numberOfReservedBooks,
         numberOfAvailableBooks,
-        numberOfEBooks,
         numberOfTotalBooks,
         statusCounts,
         last12MonthsData,

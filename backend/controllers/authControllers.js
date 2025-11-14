@@ -2,7 +2,6 @@ import UserModel from "../models/user-model.js";
 import {
   ErrorHandlerService,
   deleteFile,
-  sendMail,
   tokenService,
 } from "../services/index.js";
 import Jimp from "jimp";
@@ -193,15 +192,12 @@ class AuthController {
       user.resetToken = resetToken;
       await user.save();
 
-      // send email
-      // console.log(`Email Send ! Your password reset link is ${resetToken}`);
-      await sendMail({
-        to: user.email,
-        from: "ggclibrary@gmail.com",
-        subject: "GGC Library Password Reset Link",
-        text: `Hello ${user.name} ! Your password reset link is  http://localhost:5173/new-password/${resetToken}/, Click on that link in order to change password`,
+      // Password reset token generated
+      // Note: Email functionality has been removed
+      return res.status(200).json({ 
+        msg: "Password reset token generated successfully",
+        resetToken: resetToken // Return token in response for testing purposes
       });
-      return res.status(200).json({ msg: "Email send...." });
     } catch (error) {
       next(error);
     }

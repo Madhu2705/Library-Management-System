@@ -68,7 +68,7 @@ const BorrowedBooks = () => {
         console.log(books);
         e.target.renewalDays.value = "";
         setShowModal(false);
-        return "Request sends successfully! We sends mail to update you.";
+        return "Request sends successfully!";
       },
       error: (err) => {
         console.log(err);

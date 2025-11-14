@@ -39,9 +39,6 @@ const Footer = () => {
           <Link to="/" className="text__color">
             Books
           </Link>
-          <Link to="/about-us" className="text__color">
-            EBooks
-          </Link>
           <Link to="/contact-us" className="text__color">
             Dashboard
           </Link>

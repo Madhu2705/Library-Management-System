@@ -15,7 +15,6 @@ import {
   categoryRouter,
   clearanceRouter,
   departementRouter,
-  eBookRouter,
   genralRouter,
   studentRouter,
   teacherRouter,
@@ -71,7 +70,6 @@ app.use("/api/students", studentRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/almirahs", almirahRouter);
 app.use("/api/books", bookRouter);
-app.use("/api/ebooks", eBookRouter);
 app.use("/api/transactions", transactionRouter);
 app.use("/api/genral", genralRouter);
 app.use("/api/clearance", clearanceRouter);

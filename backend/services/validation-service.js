@@ -29,22 +29,6 @@ const bookValidationSchema = Joi.object({
   image: Joi.string().optional(),
 });
 
-/* EBOOK VALIDATION SCHEMA  */
-
-const eBookValidationSchema = Joi.object({
-  ISBN: Joi.string().required().max(10),
-  title: Joi.string().required().max(50),
-  author: Joi.string()
-    .required()
-    .max(30)
-    .pattern(/^[A-Za-z\s]+$/),
-  category: Joi.string().required(),
-  publisher: Joi.string().optional(),
-  edition: Joi.string().optional(),
-  description: Joi.string().optional(),
-  tags: Joi.string().optional(),
-});
-
 /* TEACHER VALIDATION SCHEMA */
 const teacherValidationSchema = Joi.object({
   name: Joi.string()
@@ -56,6 +40,7 @@ const teacherValidationSchema = Joi.object({
     .max(30)
     .pattern(/^[A-Za-z\s]+$/),
   email: Joi.string().required().email(),
+  password: Joi.string().required().min(6).max(50),
 }).messages(customErrorMessages);
 
 const contactUsValidationSchema = Joi.object({
@@ -81,6 +66,7 @@ const studentValidationSchema = Joi.object({
   rollNumber: Joi.string().required(),
   departement: Joi.string().required(),
   batch: Joi.string().required(),
+  password: Joi.string().required().min(6).max(50),
   accountStatus: Joi.boolean().optional(),
 }).messages(customErrorMessages);
 
@@ -161,7 +147,6 @@ export {
   categoryValidationSchema,
   almirahValidationSchema,
   bookValidationSchema,
-  eBookValidationSchema,
   issuedBookSchema,
   contactUsValidationSchema,
   renewBookSchema,

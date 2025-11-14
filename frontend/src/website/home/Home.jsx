@@ -145,11 +145,6 @@ const Home = () => {
         </div>
 
         <div>
-          <FaAtlas className="icon" />
-          <h3>Total EBooks </h3>
-          <p>{data?.totalEBooks}</p>
-        </div>
-        <div>
           <FaUser className="icon" />
           <h3>Total Users </h3>
           <p>{data?.totalUsers}</p>

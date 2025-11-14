@@ -1,7 +1,6 @@
 import BatchModel from "../models/batch-model.js";
 import {
   ErrorHandlerService,
-  exportToCSV,
   paginationService,
 } from "../services/index.js";
 import { batchValidationSchema } from "../services/validation-service.js";
@@ -103,23 +102,6 @@ class BatchController {
     }
   }
 
-  async exportBatches(req, res, next) {
-    try {
-      const data = await BatchModel.find();
-      if (data.length === 0) {
-        return next(ErrorHandlerService.notFound("Data not found"));
-      }
-      const columns = [
-        { header: "Name", key: "name" },
-        { header: "Starting Year", key: "startingYear" },
-        { header: "Ending Year", key: "endingYear" },
-      ];
-      const fileName = "batches.csv";
-      exportToCSV(data, columns, fileName, res);
-    } catch (error) {
-        next(error);
-    }
-  }
 }
 
 export default new BatchController();

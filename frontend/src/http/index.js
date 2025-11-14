@@ -73,7 +73,6 @@ export const addNewTeacher = async (data) => api.post("/teachers", data);
 export const deleteTeacher = async (_id) => api.delete(`/teachers/${_id}`);
 export const updateTeacher = async (_id, data) =>
   api.put(`/teachers/${_id}`, data);
-export const exportTeachers = async () => api.get(`/teachers/files/export`);
 // ######################## MANAGE STUDENT REQUESTS #################################
 export const getAllStudents = async (qEmail, qName, qRollNumber, page) =>
   await api.get(
@@ -83,32 +82,27 @@ export const addNewStudent = async (data) => api.post("/students", data);
 export const deleteStudent = async (_id) => api.delete(`/students/${_id}`);
 export const updateStudent = async (_id, data) =>
   api.put(`/students/${_id}`, data);
-export const exportStudents = async () => api.get(`/students/files/export`);
 // ############################## Category End Points ##########################
 export const addNewCategory = (data) => api.post("/categories/", data);
 export const deleteCategory = (_id) => api.delete(`/categories/${_id}`);
 export const updateCategory = (_id, data) =>
   api.put(`/categories/${_id}`, data);
-export const exportCategories = () => api.get("/categories/files/export");
 export const getAllCategories = (q, page) =>
   api.get(`/categories?q=${q}&page=${page}`);
 // ################################ Almirah Add ##############################
 export const addNewAlmirah = (data) => api.post("/almirahs/", data);
-export const exportAlmirahs = () => api.get("/almirahs/files/export");
 export const getAllAlmirahs = (q, page) =>
   api.get(`/almirahs?q=${q}&page=${page}`);
 export const deleteAlmirah = (_id) => api.delete(`/almirahs/${_id}`);
 export const updateAlmirah = (_id, data) => api.put(`/almirahs/${_id}`, data);
 // ################################ Batch Add ##############################
 export const addNewBatch = (data) => api.post("/batches/", data);
-export const exportBatches = () => api.get("/batches/files/export");
 export const getAllBatches = (q, page) =>
   api.get(`/batches?q=${q}&page=${page}`);
 export const deleteBatches = (_id) => api.delete(`/batches/${_id}`);
 export const updateBatch = (_id, data) => api.put(`/batches/${_id}`, data);
 // ################################ Batch Add ##############################
 export const addNewDepartement = (data) => api.post("/departements/", data);
-export const exportDepartements = () => api.get("/departements/files/export");
 export const getAllDepartements = (q, page) =>
   api.get(`/departements?q=${q}&page=${page}`);
 export const deleteDepartement = (_id) => api.delete(`/departements/${_id}`);
@@ -144,27 +138,6 @@ export const getAllCategoriesWithoutPagination = () =>
 export const getAllAlmirahsWithoutPagination = (query, page) =>
   api.get(`/almirahs?limit=200`);
 
-/* EBOOK REQUESTS */
-
-export const exportEBooks = () => api.get("/ebooks/files/export");
-export const getAllEBooks = (query, page, limit) =>
-  api.get(
-    `/ebooks?qISBN=${query?.ISBN}&qTitle=${query?.title}&qCategory=${query?.category}&page=${page}&limit=${limit}`
-  );
-export const deleteEBook = (_id) => api.delete(`/ebooks/${_id}`);
-export const getEBook = (_id) => api.get(`/ebooks/${_id}`);
-export const addNewEBook = (data) =>
-  api.post("/ebooks/", data, {
-    headers: {
-      "Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
-    },
-  });
-export const updateEBook = (_id, data) =>
-  api.put(`/ebooks/${_id}/`, data, {
-    headers: {
-      "Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
-    },
-  });
 /* ################################   TRANSACTIONS ######################################### */
 export const getAdminDashboardStats = () =>
   api.get(`transactions/admin-dashboard-stats`);

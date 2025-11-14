@@ -7,12 +7,6 @@ const APP_PORT = process.env.APP_PORT || 4000;
 const MONGO_DB_URI = process.env.MONGO_DB_URI;
 const DEBUG_MODE = process.env.DEBUG_MODE;
 const BASE_URL = process.env.BASE_URL;
-/* FOR EMAIL */
-const SMTP_HOST = process.env.SMTP_HOST;
-const SMTP_PORT = process.env.SMTP_PORT;
-const MAIL_USER = process.env.MAIL_USER;
-const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
-const ADMIN_MAIL = process.env.ADMIN_MAIL;
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
@@ -38,10 +32,6 @@ export {
   APP_PORT,
   MONGO_DB_URI,
   DEBUG_MODE,
-  SMTP_HOST,
-  SMTP_PORT,
-  MAIL_USER,
-  MAIL_PASSWORD,
   ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_SECRET,
   FORGET_PASSWORD_TOKEN_SECRET,
@@ -55,5 +45,4 @@ export {
   MAX_RESERVATION_DURATION,
   NUMBER_OF_DAYS_OF_STUDENT,
   NUMBER_OF_DAYS_OF_TEACHER_OR_HOD,
-  ADMIN_MAIL,
 };

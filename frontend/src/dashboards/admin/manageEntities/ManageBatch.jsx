@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   addNewBatch,
-  exportBatches,
   getAllBatches,
   updateBatch,
 } from "../../../http";
@@ -84,20 +83,6 @@ const ManageBatch = () => {
     });
   };
 
-  const handleExport = () => {
-    const promise = exportBatches();
-    toast.promise(promise, {
-      loading: "Exporting",
-      success: (response) => {
-        window.open(response?.data?.downloadUrl);
-        return "Exported successfully";
-      },
-      error: (err) => {
-        console.log(err);
-        return "Something went wrong while exporting data.";
-      },
-    });
-  };
 
   const fetchData = async () => {
     try {
@@ -140,9 +125,6 @@ const ManageBatch = () => {
             }}
           >
             Add New
-          </button>
-          <button className="btn btn__secondary" onClick={handleExport}>
-            Export to CSV
           </button>
         </div>
       </div>

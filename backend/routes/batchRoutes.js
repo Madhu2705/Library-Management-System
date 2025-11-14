@@ -13,7 +13,6 @@ batchRouter.get("/:_id",batchControllers.getBatch);
 batchRouter.post("/", authMiddleware ,adminMiddleware, batchControllers.createBatch);
 batchRouter.put("/:_id", authMiddleware ,adminMiddleware, batchControllers.updateBatch);
 batchRouter.delete("/:_id", authMiddleware ,adminMiddleware, batchControllers.deleteBatch);
-batchRouter.get("/files/export", authMiddleware ,adminMiddleware, batchControllers.exportBatches);
 
 
 export default batchRouter;

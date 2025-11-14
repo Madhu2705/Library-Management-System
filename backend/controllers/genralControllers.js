@@ -1,10 +1,7 @@
-import { ADMIN_MAIL } from "../config/index.js";
 import BookModel from "../models/book-model.js";
 import CategoryModel from "../models/category-model.js";
 import ContactUsModel from "../models/contact-us-model.js";
-import EBookModel from "../models/ebook-model.js";
 import UserModel from "../models/user-model.js";
-import sendMail from "../services/email-service.js";
 import ErrorHandlerService from "../services/error-handler-service.js";
 import { contactUsValidationSchema } from "../services/validation-service.js";
 
@@ -18,20 +15,6 @@ class GenralController {
 
     try {
       await ContactUsModel.create(req.body);
-      /* SEND MAIL TO ADMIN */
-      await sendMail({
-        to: ADMIN_MAIL,
-        from: email,
-        subject: "New Contact Form Submission",
-        text: `
-        Sender Information : 
-        Name : ${name}
-        Email : ${email}
-
-        Message Content : 
-        ${message}
-        `,
-      });
       return res.status(200).json({ msg: "Message sent successfully !" });
     } catch (error) {
       next(error);
@@ -61,15 +44,6 @@ class GenralController {
             ErrorHandlerService.validationError("Message is required.")
           );
         }
-        /* SEND MAIL */
-        await sendMail({
-          to: document.email,
-          from: ADMIN_MAIL,
-          subject: "Reply from GGC LMS",
-          text: `             
-                Reply From Admin : ${replyMessage}
-                `,
-        });
       }
       document.status = "read";
       await document.save();
@@ -85,7 +59,6 @@ class GenralController {
         newBooks,
         popularBooks,
         totalBooks,
-        totalEBooks,
         totalUsers,
         totalCategories,
       ] = await Promise.all([
@@ -97,7 +70,6 @@ class GenralController {
           .sort({ rating: -1 })
           .limit(8),
         BookModel.countDocuments({ isDeleted: false }),
-        EBookModel.countDocuments(),
         UserModel.countDocuments(),
         CategoryModel.countDocuments(),
       ]);
@@ -105,7 +77,6 @@ class GenralController {
         newBooks,
         popularBooks,
         totalBooks,
-        totalEBooks,
         totalUsers,
         totalCategories,
       });
@@ -123,21 +94,13 @@ class GenralController {
       return next(ErrorHandlerService.validationError());
     }
     try {
-      let book;
-      if (bookType === "ebook") {
-        book = await EBookModel.findById(_id).populate("category").populate({
+      const book = await BookModel.findById(_id)
+        .populate("category")
+        .populate("almirah")
+        .populate({
           path: "reviews.user",
           select: "name",
         });
-      } else {
-        book = await BookModel.findById(_id)
-          .populate("category")
-          .populate("almirah")
-          .populate({
-            path: "reviews.user",
-            select: "name",
-          });
-      }
 
       if (!book) {
         return next(ErrorHandlerService.notFound("Book Not Found"));

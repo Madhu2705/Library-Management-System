@@ -8,7 +8,6 @@ const studentRouter = Router();
 /* ENDPOINTS */
 studentRouter.post("/",authMiddleware,adminMiddleware,studentControllers.createStudent);
 studentRouter.get("/",authMiddleware,adminMiddleware,studentControllers.getStudents);
-studentRouter.get("/files/export",authMiddleware,adminMiddleware,studentControllers.exportStudents);
 studentRouter.put("/:_id",authMiddleware,adminMiddleware,studentControllers.updateStudent);
 studentRouter.delete("/:_id",authMiddleware,adminMiddleware,studentControllers.deleteStudent);
 
