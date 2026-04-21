@@ -5,12 +5,14 @@ import {
   deleteStudent,
   getAllStudents,
   updateStudent,
+  bulkUploadStudents,
 } from "../../../http";
 import profileImage from "../../../assets/avatar.svg";
 import { toast } from "react-hot-toast";
-import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
+import { FaEdit, FaEye, FaTrash, FaUpload } from "react-icons/fa";
 import { Modal, Pagination } from "../../../components";
 import { Link, useNavigate } from "react-router-dom";
+import * as XLSX from "xlsx";
 
 const ManageStudent = () => {
   const [query, setQuery] = useState({ email: "", name: "", rollNumber: "" });
@@ -113,6 +115,81 @@ const ManageStudent = () => {
     });
   };
 
+  const handleDownloadTemplate = async () => {
+    try {
+      const response = await getSampleStudents();
+      const sampleStudents = response.data.students;
+
+      const worksheet = XLSX.utils.json_to_sheet(sampleStudents);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+      XLSX.writeFile(workbook, "students_sample_10.xlsx");
+      toast.success("Sample file downloaded successfully!");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to download template");
+    }
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const data = new Uint8Array(event.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+        if (jsonData.length === 0) {
+          toast.error("Excel file is empty");
+          return;
+        }
+
+        const requiredFields = ["name", "fatherName", "email", "rollNumber", "departement", "batch", "password"];
+        const missingFields = requiredFields.filter(field => !(field in jsonData[0]));
+        
+        if (missingFields.length > 0) {
+          toast.error(`Missing columns: ${missingFields.join(", ")}`);
+          return;
+        }
+
+        const promise = bulkUploadStudents({ students: jsonData });
+        toast.promise(promise, {
+          loading: "Uploading students...",
+          success: (data) => {
+            fetchData();
+            
+            // Show detailed error messages if there are failures
+            if (data.data.errors && data.data.errors.length > 0) {
+              const errorMessages = data.data.errors
+                .slice(0, 3) // Show first 3 errors
+                .map(e => `${e.name || e.rollNumber}: ${e.error}`)
+                .join("\n");
+              
+              setTimeout(() => {
+                toast.error(
+                  `Failed Students:\n${errorMessages}${data.data.errors.length > 3 ? `\n... and ${data.data.errors.length - 3} more` : ""}`,
+                  { duration: 5000 }
+                );
+              }, 1000);
+            }
+            
+            return `✅ ${data.data.successful} students added, ❌ ${data.data.failed} failed`;
+          },
+          error: (err) => {
+            return err?.response?.data?.message || "Upload failed";
+          },
+        });
+      } catch (error) {
+        toast.error("Error reading Excel file");
+        console.error(error);
+      }
+    };
+    reader.readAsArrayBuffer(file);
+    e.target.value = "";
+  };
 
   const fetchData = async () => {
     try {
@@ -161,6 +238,16 @@ const ManageStudent = () => {
           >
             Add New
           </button>
+          <label className="btn btn__primary" style={{ cursor: "pointer", marginLeft: "10px" }}>
+            <FaUpload style={{ marginRight: "5px" }} />
+            Upload Excel
+            <input
+              type="file"
+              accept=".xlsx,.xls,.csv"
+              onChange={handleFileUpload}
+              style={{ display: "none" }}
+            />
+          </label>
         </div>
       </div>
 
@@ -377,10 +464,10 @@ const ManageStudent = () => {
           </div>
 
           <div className="form-control">
-            <label htmlFor="departement">Departement</label>
+            <label htmlFor="departementAdd">Departement</label>
             <select
               name="departement"
-              id="departement"
+              id="departementAdd"
               className="bg text__color"
               value={formData.departement}
               onChange={handleChange}
@@ -492,10 +579,10 @@ const ManageStudent = () => {
           </div>
 
           <div className="form-control">
-            <label htmlFor="departement">Departement</label>
+            <label htmlFor="departementUpdate">Departement</label>
             <select
               name="departement"
-              id="departement"
+              id="departementUpdate"
               className="bg text__color"
               value={formData.departement}
               onChange={handleChange}

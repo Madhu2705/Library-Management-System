@@ -39,8 +39,6 @@ function SideBar({ open, setOpen, menu }) {
             }
             alt="Profile Image"
           />
-          <span className="username">{user.name}</span>
-          <span className="role text__primary">({user.role})</span>
         </div>
         <div className="list">
           {menu?.map((i) => (

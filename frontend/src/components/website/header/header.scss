@@ -76,15 +76,6 @@ header {
           height: 30px;
         }
       }
-      span {
-        font-size: 15px;
-        margin-left: 3px;
-
-        @include md {
-          font-size: 13px;
-        }
-      }
-
       // dropdown
       .dropdown__wrapper {
         max-height: 0px;

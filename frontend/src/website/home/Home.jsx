@@ -40,7 +40,7 @@ const Home = () => {
     <div className="bg text__color">
       {/* Hero Section */}
       <section className="hero ">
-        <h1>Welcomet to Govt. Graduate College,Jhelum Library</h1>
+        <h1>Welcome to Library Management System</h1>
         <span className="subheading">
           Explore our vast collection of books and resources.
         </span>
@@ -58,7 +58,7 @@ const Home = () => {
             <h1>Welcome Message </h1>
           </div>
           <p>
-            Welcome to the Govt. Graduate College, Jhelum Library Management
+            Welcome to the Library Management System
             System !
           </p>
           <p>
@@ -66,7 +66,7 @@ const Home = () => {
             state-of-the-art Information Resource Center which fulfills
             ever-evolving needs of our academic clientele. We are dedicated to
             support the curriculum and educational mission of the college. The
-            aim of the GGC Library is to deliver the best print, digital and
+            aim of the Library Management System is to deliver the best print, digital and
             online information resources and reference services to support your
             teaching, learning, and research activities. We also provide
             conducive environment and wonderful spaces for research, study and

@@ -33,10 +33,8 @@ const ClearanceForm = () => {
   const fetchRequests = async () => {
     try {
       const { data } = await getClearanceRequestByStudent();
-      console.log(data?.clearanceRequests);
       setRequests(data?.clearanceRequests);
     } catch (error) {
-      console.log(error);
     }
   };
 

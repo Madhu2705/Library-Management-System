@@ -73,6 +73,7 @@ const studentValidationSchema = Joi.object({
 const issuedBookSchema = Joi.object({
   userID: Joi.string().required(),
   bookID: Joi.string().required(),
+  dueDate: Joi.date().optional(),
 });
 
 const renewBookSchema = Joi.object({

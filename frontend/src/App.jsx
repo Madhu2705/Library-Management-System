@@ -47,6 +47,7 @@ import { useSelector } from "react-redux";
 import { setAuth } from "./store/slices/authSlice";
 import { Profile } from "./components";
 import Loader from "./components/website/loader/Loader";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const App = () => {
   const { theme } = useSelector((state) => state.theme);
@@ -73,7 +74,8 @@ const App = () => {
 
   return (
     <div className={`${theme}`}>
-      <Routes>
+      <ErrorBoundary>
+        <Routes>
         {/* MAIN WEBSITE ROUTES */}
         <Route path="/" element={<WebsiteLayout />}>
           <Route index element={<Home />} />
@@ -152,6 +154,7 @@ const App = () => {
       </Routes>
 
       <Toaster position="top-center" reverseOrder={false} />
+      </ErrorBoundary>
     </div>
   );
 };

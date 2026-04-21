@@ -79,6 +79,8 @@ export const getAllStudents = async (qEmail, qName, qRollNumber, page) =>
     `/students?qEmail=${qEmail}&qName=${qName}&qRollNumber=${qRollNumber}&page=${page}`
   );
 export const addNewStudent = async (data) => api.post("/students", data);
+export const bulkUploadStudents = async (data) => api.post("/students/bulk-upload", data);
+export const getSampleStudents = async () => api.get("/students/sample-data");
 export const deleteStudent = async (_id) => api.delete(`/students/${_id}`);
 export const updateStudent = async (_id, data) =>
   api.put(`/students/${_id}`, data);
@@ -140,28 +142,28 @@ export const getAllAlmirahsWithoutPagination = (query, page) =>
 
 /* ################################   TRANSACTIONS ######################################### */
 export const getAdminDashboardStats = () =>
-  api.get(`transactions/admin-dashboard-stats`);
+  api.get(`/transactions/admin-dashboard-stats`);
 export const getAllIssuedBooks = (query, page) =>
   api.get(
     `/transactions/issued-books?email=${query.email}&rollNumber=${query.rollNumber}&ISBN=${query.ISBN}&page=${page}`
   );
 export const getAllReservedBooks = (page) =>
-  api.get(`transactions/reserved-books?page=${page}`);
+  api.get(`/transactions/reserved-books?page=${page}`);
 export const getAllReturnedBooks = (page) =>
-  api.get(`transactions/returned-books?page=${page}`);
+  api.get(`/transactions/returned-books?page=${page}`);
 export const payFine = (data) => api.post("/transactions/pay-fine", data);
-export const ReturnBook = (data) => api.post("transactions/return-book", data);
+export const ReturnBook = (data) => api.post("/transactions/return-book", data);
 
 /* TO GET USER DETAILS AND CHECK HOW MANY BOOKS IT ALREADY BORROWED */
 export const getUserInfo = (query) =>
   api.get(
-    `transactions/user-info?qEmail=${query.email}&qRollNumber=${query.rollNumber}`
+    `/transactions/user-info?qEmail=${query.email}&qRollNumber=${query.rollNumber}`
   );
 export const getBookInfo = (query) =>
-  api.get(`transactions/book-info?qISBN=${query.ISBN}`);
-export const issueBook = (data) => api.post(`transactions/issue-book`, data);
+  api.get(`/transactions/book-info?qISBN=${query.ISBN}`);
+export const issueBook = (data) => api.post(`/transactions/issue-book`, data);
 export const reservedBook = (data) =>
-  api.post(`transactions/reserved-book`, data);
+  api.post(`/transactions/reserved-book`, data);
 
 // RENEW BOOK REQUESTS
 export const renewBookRequest = (data) =>
@@ -172,15 +174,15 @@ export const handleRenewRequest = (data) =>
 
 // student,teachers dashboard
 export const getUserDashboardStats = () =>
-  api.get(`transactions/user-dashboard-stats`);
+  api.get(`/transactions/user-dashboard-stats`);
 export const getBorrowedBooks = () =>
-  api.get(`transactions/borrowed-books-user`);
+  api.get(`/transactions/borrowed-books-user`);
 export const getReservedBooks = () =>
-  api.get(`transactions/reserved-books-user`);
+  api.get(`/transactions/reserved-books-user`);
 export const getReturnedBooks = () =>
-  api.get(`transactions/returned-books-user`);
+  api.get(`/transactions/returned-books-user`);
 export const unReservedBook = (_id) =>
-  api.get(`transactions/unreserved-book/${_id}`);
+  api.get(`/transactions/unreserved-book/${_id}`);
 
 /* CLEARANCE FORM REQUESTS */
 export const submitClearanceForm = (data) =>

@@ -13,10 +13,8 @@ const AdminHome = () => {
     try {
       const { data } = await getAdminDashboardStats();
       setData(data);
-      console.log(data);
       setStatus(STATUSES.IDLE);
     } catch (error) {
-      console.log(error);
       setStatus(STATUSES.ERROR);
     }
   };
@@ -28,8 +26,17 @@ const AdminHome = () => {
     return <Loader />;
   }
 
+  if (status === STATUSES.ERROR || !data) {
+    return (
+      <div style={{ padding: "20px", textAlign: "center", color: "red" }}>
+        <h2>Failed to load dashboard data</h2>
+        <p>Please try refreshing the page or contact support</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="user__home__container">
+    <div className="admin__home__container">
       {/* COUNTER CARDS */}
       <div className="card__wrapper">
         <CountCard
@@ -95,8 +102,8 @@ const AdminHome = () => {
               return (
                 <tr key={transaction._id}>
                   <td>{index + 1}</td>
-                  <td>{transaction.user.name}</td>
-                  <td>{transaction.book.title}</td>
+                  <td>{transaction.user?.name || "N/A"}</td>
+                  <td>{transaction.book?.title || "N/A"}</td>
                   <td>{formatDate(transaction.borrowDate)}</td>
                   <td>{formatDate(transaction.dueDate)}</td>
                 </tr>
@@ -132,8 +139,8 @@ const AdminHome = () => {
               return (
                 <tr key={transaction._id}>
                   <td>{index + 1}</td>
-                  <td>{transaction.user.name}</td>
-                  <td>{transaction.book.title}</td>
+                  <td>{transaction.user?.name || "N/A"}</td>
+                  <td>{transaction.book?.title || "N/A"}</td>
                   <td>{formatDate(transaction.borrowDate)}</td>
                   <td>{formatDate(transaction.returnedDate)}</td>
                 </tr>

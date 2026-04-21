@@ -170,15 +170,23 @@ class TransactionController {
         }
       }
 
-      /* SET DUE DATE ACCORDING TO USER ROLE : STUDENT ALLOW 7 DAYS AND TEACHERS ALLOW 10 DAYS */
-      const currentDate = new Date();
-      const dueDate = new Date(currentDate);
-      dueDate.setDate(
-        currentDate.getDate() +
-          (user.role === "Student"
-            ? NUMBER_OF_DAYS_OF_STUDENT
-            : NUMBER_OF_DAYS_OF_TEACHER_OR_HOD)
-      );
+      /* SET DUE DATE ACCORDING TO USER ROLE OR EXPLICIT DUE DATE */
+      let dueDate;
+      if (req.body?.dueDate) {
+        dueDate = new Date(req.body.dueDate);
+        if (isNaN(dueDate.getTime())) {
+          return next(ErrorHandlerService.validationError("Invalid dueDate provided."));
+        }
+      } else {
+        const currentDate = new Date();
+        dueDate = new Date(currentDate);
+        dueDate.setDate(
+          currentDate.getDate() +
+            (user.role === "Student"
+              ? NUMBER_OF_DAYS_OF_STUDENT
+              : NUMBER_OF_DAYS_OF_TEACHER_OR_HOD)
+        );
+      }
 
       /* ISSUED BOOK */
       const transaction = new TransactionModel({
@@ -188,7 +196,14 @@ class TransactionController {
         userEmail: user.email,
         rollNumber: user?.rollNumber,
         dueDate,
+        // If dueDate is already in the past, calculate initial fine (overdue on issue)
+        fine: 0,
       });
+      // Calculate fine immediately if dueDate is in the past
+      const { fine } = calculateFine(dueDate, new Date());
+      if (fine > 0) {
+        transaction.fine = fine;
+      }
       await transaction.save();
       /* CHANGE STAUTUS OF BOOK  */
       book.status = "Issued";
@@ -504,7 +519,7 @@ class TransactionController {
         Thank you for using our library services.
 
         Best regards,
-        GGC Library Management System Admin
+        Library Management System Admin
           `,
       });
 

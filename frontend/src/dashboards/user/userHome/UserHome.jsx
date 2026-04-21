@@ -15,7 +15,6 @@ const UserHome = () => {
       // console.log(data);
       setStatus(STATUSES.IDLE);
     } catch (error) {
-      console.log(error);
       setStatus(STATUSES.ERROR);
     }
   };

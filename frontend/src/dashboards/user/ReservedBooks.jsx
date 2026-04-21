@@ -22,11 +22,8 @@ const ReservedBooks = () => {
   const fetchReservedBooks =async () => {
       try {
         const {data} = await getReservedBooks();
-        console.log(data?.reservedBooks);
-        console.log(data);
         setBooks(data?.reservedBooks);
       } catch (error) {
-          console.log(error);
       }
   }
 
@@ -39,7 +36,7 @@ const ReservedBooks = () => {
         return "Book Unreserved  successfully..";
       },
       error: (err) => {
-        console.log();
+
         return err?.response?.data?.message || "Something went wrong !";
       },
     });

@@ -41,7 +41,7 @@ const BookReader = () => {
 
   const handlePageChange = (e) => {
     // localStorage.setItem('current-page', `${e.currentPage}`);
-    console.log(e.currentPage);
+
     /* STORE INTO LOCALSTORAGE ALSO STORE ID MEANS FILENAME SO THAT WE UNIQUELY IDENTIFY IT.... */
     localStorage.setItem(`current-page-${fileName}`, `${e.currentPage}`);
   };

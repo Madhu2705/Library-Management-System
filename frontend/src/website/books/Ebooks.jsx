@@ -25,9 +25,7 @@ const EBooks = () => {
       const {data : categoriesData} = await getAllCategoriesWithoutPagination();
       setBooksData(books);
       setCategories(categoriesData?.categories);
-      console.log(categoriesData);
     } catch (error) {
-      console.log(error);
     }
   };
 

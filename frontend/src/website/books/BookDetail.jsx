@@ -9,7 +9,7 @@ import {
   reservedBook,
 } from "../../http";
 import { useSelector } from "react-redux";
-import { toast } from "react-hot-toast";
+// notifications removed
 import { formatDate } from "../../utils/formatDate";
 import Stars from "../../components/website/stars/Stars";
 
@@ -20,43 +20,28 @@ const BookDetail = () => {
   const auth = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
-  const submitReview = (e) => {
+  const submitReview = async (e) => {
     e.preventDefault();
-    const promise = createReview(_id, {
-      rating: e.target.rating.value,
-      comment: e.target.comment.value,
-    });
-    toast.promise(promise, {
-      loading: "Adding...",
-      success: (response) => {
-        e.target.rating.value = "";
-        e.target.comment.value = "";
-        console.log(response);
-        setBook(response?.data?.book);
-        return "Review added successfully..";
-      },
-      error: (err) => {
-        console.log(err);
-        return err?.response?.data?.message || "Something went wrong !";
-      },
-    });
+    try {
+      const response = await createReview(_id, {
+        rating: e.target.rating.value,
+        comment: e.target.comment.value,
+      });
+      e.target.rating.value = "";
+      e.target.comment.value = "";
+      setBook(response?.data?.book);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleReservedBook = () => {
-    const promise = reservedBook({
-      ISBN: book?.ISBN,
-    });
-    toast.promise(promise, {
-      loading: "Reserving...",
-      success: (response) => {
-        setBook(response?.data?.book);
-        return "Reserved successfully..";
-      },
-      error: (err) => {
-        console.log(err);
-        return err?.response?.data?.message || "Something went wrong !";
-      },
-    });
+  const handleReservedBook = async () => {
+    try {
+      const response = await reservedBook({ ISBN: book?.ISBN });
+      setBook(response?.data?.book);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const fetchBook = async () => {
@@ -66,7 +51,6 @@ const BookDetail = () => {
       setBook(data);
       setStatus(STATUSES.IDLE);
     } catch (error) {
-      console.log(error);
       setStatus(STATUSES.ERROR);
     }
   };

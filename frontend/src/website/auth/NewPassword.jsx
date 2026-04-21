@@ -5,7 +5,7 @@ import { resetPassword } from '../../http';
 
 const NewPassword = () => {
   const {token} = useParams();
-  console.log(token);
+
   const navigate = useNavigate();
 
   function handleSubmit(e) {
@@ -30,7 +30,7 @@ const NewPassword = () => {
         }
       })
 
-      console.log(password,confirmPassword);
+
   }
 
   return (

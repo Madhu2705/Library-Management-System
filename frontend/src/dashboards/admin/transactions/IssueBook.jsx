@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./issuebook.scss";
 import { getBookInfo, getUserInfo, issueBook } from "../../../http";
 import { toast } from "react-hot-toast";
@@ -6,6 +6,7 @@ import { formatDate } from "../../../utils/formatDate";
 const IssueBook = () => {
   const [userData, setUserData] = useState(null);
   const [bookData, setBookData] = useState(null);
+  const [dueDate, setDueDate] = useState("");
 
   const searchStudent = (e) => {
     e.preventDefault();
@@ -17,6 +18,15 @@ const IssueBook = () => {
       loading: "Loading...",
       success: (data) => {
         setUserData(data?.data);
+        // Suggest default due date based on role: student -> 7 days, teacher/hod -> 15 days
+        const userRole = data?.data?.user?.role;
+        const days = userRole === "Student" ? 7 : 15;
+        const defaultDue = new Date();
+        defaultDue.setDate(defaultDue.getDate() + days);
+        const yyyy = defaultDue.getFullYear();
+        const mm = String(defaultDue.getMonth() + 1).padStart(2, "0");
+        const dd = String(defaultDue.getDate()).padStart(2, "0");
+        setDueDate(`${yyyy}-${mm}-${dd}`);
         /* CLEAR INPUT VALUE */
         e.target.email.value = "";
         e.target.rollNumber.value = "";
@@ -74,15 +84,18 @@ const IssueBook = () => {
     }
 
     /* ISSUE BOOK BECAUSE ALL CONDITION VALID */
-    const promise = issueBook({
+    const payload = {
       bookID: bookData?.book?._id,
       userID: userData?.user?._id,
-    });
+    };
+    if (dueDate) payload.dueDate = dueDate;
+    const promise = issueBook(payload);
     toast.promise(promise, {
       loading: "Issuing...",
       success: (data) => {
         setBookData(null);
         setUserData(null);
+        setDueDate("");
         return "Book Issued successfully..";
       },
       error: (err) => {
@@ -233,6 +246,15 @@ const IssueBook = () => {
               )}
             </table>
           </div>
+
+              <div className="form-control">
+                <label>Return Date (Due)</label>
+                <input
+                  type="date"
+                  value={dueDate}
+                  onChange={(e) => setDueDate(e.target.value)}
+                />
+              </div>
 
           {/* ISSUE BUTTON */}
           <button className="btn btn__primary" onClick={handleIssueBook}>

@@ -33,7 +33,6 @@ const Books = () => {
       setCategories(categoriesData?.categories);
       // console.log(categoriesData);
     } catch (error) {
-      console.log(error);
     }
   };
 

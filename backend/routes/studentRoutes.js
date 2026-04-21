@@ -7,6 +7,8 @@ const studentRouter = Router();
 
 /* ENDPOINTS */
 studentRouter.post("/",authMiddleware,adminMiddleware,studentControllers.createStudent);
+studentRouter.post("/bulk-upload",authMiddleware,adminMiddleware,studentControllers.bulkUploadStudents);
+studentRouter.get("/sample-data",authMiddleware,adminMiddleware,studentControllers.getSampleData);
 studentRouter.get("/",authMiddleware,adminMiddleware,studentControllers.getStudents);
 studentRouter.put("/:_id",authMiddleware,adminMiddleware,studentControllers.updateStudent);
 studentRouter.delete("/:_id",authMiddleware,adminMiddleware,studentControllers.deleteStudent);

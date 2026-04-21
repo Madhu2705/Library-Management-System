@@ -2,7 +2,7 @@ import { useState } from "react";
 import { contactUs } from "../../http";
 import "./contactUs.scss";
 import { useSelector } from "react-redux";
-import {toast} from "react-hot-toast";
+// notifications removed: react-hot-toast
 
 const ContactUs = () => {
   const auth= useSelector((state)=>state.auth);
@@ -17,7 +17,7 @@ const ContactUs = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const promise = contactUs({
       name: formData.name,
@@ -25,17 +25,13 @@ const ContactUs = () => {
       message : formData.message
     });
 
-    toast.promise(promise, {
-      loading: "Sending...",
-      success: (data) => {
-        setFormData({...formData,message:""});
-        return "Message sent successfully..";
-      },
-      error: (err) => {
-        console.log(err);
-        return err?.response?.data?.message || "Something went wrong !";
-      },
-    });
+    try {
+      await promise;
+      setFormData({...formData,message:""});
+      // notification removed
+    } catch (err) {
+      console.error(err);
+    }
   }
   return (
     <div className="bg text__color contactus">

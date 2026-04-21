@@ -10,10 +10,8 @@ const ReturnedBooks = () => {
   const fetchReturnedBooks =async () => {
       try {
         const {data} = await getReturnedBooks();
-        console.log(data?.returnedBooks);
         setBooks(data?.returnedBooks);
       } catch (error) {
-          console.log(error);
       }
   }
 

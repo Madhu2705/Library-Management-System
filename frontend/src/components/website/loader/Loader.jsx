@@ -5,7 +5,7 @@ import "./loader.scss";
 function Loader() {
   return (
     <div className="spinner text__color">
-      <h1>GGC Library Management System</h1>
+      <h1>Library Management System</h1>
       <FaSpinner className="loader-icon" />
       <p>Loading...</p>
     </div>

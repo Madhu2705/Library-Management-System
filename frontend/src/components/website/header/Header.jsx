@@ -1,11 +1,10 @@
 import "./header.scss";
 import { BiPhoneCall } from "react-icons/bi";
-import { AiOutlineClose, AiOutlineMail } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineMail, AiOutlineMenu } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { FaRegUserCircle, FaRegMoon } from "react-icons/fa";
 import { GiBookAura } from "react-icons/gi";
-import { AiOutlineMenu } from "react-icons/ai";
 import { FiSun } from "react-icons/fi";
 import { NavLink, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -35,18 +34,12 @@ const Header = () => {
     <header>
       <div className="topbar bg__secondary text__color">
         <span>Discover, Learn, Thrive: Dive into our Library!</span>
-        <div>
-          <BiPhoneCall />
-          <span>030339845224</span>
-          <AiOutlineMail />
-          <span>ggclib@gmail.com</span>
-        </div>
       </div>
 
       <nav className="bg__accent">
         <div className="logo text__primary">
           <GiBookAura className="logo__icon" />
-          <span>GGC Library</span>
+          <span>Library Management System</span>
         </div>
         <div className="center">
           <NavLink to="/" className="text__color ">
@@ -86,7 +79,6 @@ const Header = () => {
                 }
                 alt="Profile Image"
               />
-              <span className="name">{auth?.user?.name}</span>
 
               <div
                 className={`dropdown__wrapper bg__accent ${

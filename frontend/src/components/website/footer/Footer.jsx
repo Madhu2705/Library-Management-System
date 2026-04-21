@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="box1">
           <div className="logo text__primary">
             <GiBookAura className="icon" />
-            <h4>GGC Library</h4>
+            <h4>Library Management System</h4>
           </div>
           <p style={{ marginTop: "8px", lineHeight: "1.5rem" }}>
             Gateway to knowledge, discovery, and lifelong learning for all GGC
@@ -65,7 +65,7 @@ const Footer = () => {
       </div>
       <div className="bottom">
         <span>
-          &copy;2023 Copyright : GGC Library Management System, Jhelum
+          &copy;2023 Copyright : Library Management System
         </span>
       </div>
     </footer>

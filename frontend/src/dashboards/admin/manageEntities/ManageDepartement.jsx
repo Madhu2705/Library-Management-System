@@ -3,6 +3,7 @@ import {
   addNewDepartement,
   getAllDepartements,
   updateDepartement,
+  deleteDepartement,
 } from "../../../http";
 import { toast } from "react-hot-toast";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
@@ -80,6 +81,23 @@ const ManageDepartement = () => {
         return err?.response?.data?.message || "Something went wrong !";
       },
     });
+  };
+
+  const handleDelete = (departementId) => {
+    if (window.confirm("Are you sure you want to delete this department?")) {
+      const promise = deleteDepartement(departementId);
+      toast.promise(promise, {
+        loading: "Deleting...",
+        success: (data) => {
+          fetchData();
+          return "Department deleted successfully!";
+        },
+        error: (err) => {
+          console.log(err);
+          return err?.response?.data?.message || "Failed to delete department!";
+        },
+      });
+    }
   };
 
 
@@ -180,6 +198,14 @@ const ManageDepartement = () => {
                       }}
                     >
                       <FaEdit />
+                    </button>
+                    <button
+                      className="btn btn__danger"
+                      onClick={() => {
+                        handleDelete(i._id);
+                      }}
+                    >
+                      <FaTrash />
                     </button>
                   </td>
                 </tr>
