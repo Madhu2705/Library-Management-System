@@ -33,6 +33,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use("/uploads", express.static("uploads"));
 
 /* ABSOLUTE PATH OF BACKEND FOLDER */
 const __filename = fileURLToPath(import.meta.url);
@@ -40,9 +41,9 @@ export const ROOT_PATH = path.dirname(__filename);
 // console.log(ROOT_PATH);
 
 /* STATIC FOLDER */
-app.use("/public", express.static("./public"));
-app.use("/uploads", express.static("./uploads"));
-app.use("/documents", express.static("./documents"));
+app.use("/public", express.static(path.join(ROOT_PATH, "public")));
+app.use("/uploads", express.static(path.join(ROOT_PATH, "uploads")));
+app.use("/documents", express.static(path.join(ROOT_PATH, "documents")));
 
 /* MONGOOSE SETUP */
 mongoose

@@ -1,3 +1,174 @@
+// import { useEffect, useState } from "react";
+// import { Link } from "react-router-dom";
+// import "./books.scss";
+// import { AiOutlineSearch } from "react-icons/ai";
+// import defaultCover from "../../assets/cover404.jpg";
+// import {
+//   BASE_URL,
+//   getAllBooks,
+//   getAllCategoriesWithoutPagination,
+// } from "../../http";
+// import Stars from "../../components/website/stars/Stars";
+// import { Pagination } from "../../components";
+
+// const Books = () => {
+//   const [isFirstRender, setIsFirstRender] = useState(true);
+//   const [categories, setCategories] = useState(null);
+//   const [booksData, setBooksData] = useState(null);
+//   const [query, setQuery] = useState({
+//     ISBN: "",
+//     title: "",
+//     status: "",
+//     category: "",
+//     almirah: "",
+//   });
+//   const [currentPage, setCurrentPage] = useState(1);
+
+//   const fetchData = async () => {
+//     try {
+//       const { data: books } = await getAllBooks(query, currentPage, 10);
+//       const { data: categoriesData } =
+//         await getAllCategoriesWithoutPagination();
+//       setBooksData(books);
+//       setCategories(categoriesData?.categories);
+//       // console.log(categoriesData);
+//     } catch (error) {
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (isFirstRender) {
+//       setIsFirstRender(false);
+//       return;
+//     }
+//     setCurrentPage(1);
+//     // debouncing
+//     const handler = setTimeout(() => {
+//       fetchData();
+//     }, 1000);
+
+//     return () => {
+//       clearTimeout(handler);
+//     };
+//   }, [query]);
+
+//   useEffect(() => {
+//     fetchData();
+//   }, [currentPage]);
+
+//   return (
+//     <div className="books__wrapper bg text__color">
+//       <div className="sidebar__wrapper bg__accent">
+//         <div className="sidebar__content">
+//           <h3>Categories</h3>
+//           <ul>
+//             <li>
+//               <label>
+//                 <input
+//                   type="checkbox"
+//                   checked={query?.category === ""}
+//                   onChange={() => {
+//                     setQuery({ ...query, category: "" });
+//                   }}
+//                 />
+//                 All
+//               </label>
+//             </li>
+
+//             {categories?.map((i) => {
+//               return (
+//                 <li key={i?._id}>
+//                   <label>
+//                     <input
+//                       type="checkbox"
+//                       name="category"
+//                       checked={query.category === i?._id}
+//                       onChange={() => {
+//                         setQuery({ ...query, category: i?._id });
+//                       }}
+//                     />
+//                     {i?.name}
+//                   </label>
+//                 </li>
+//               );
+//             })}
+//           </ul>
+//         </div>
+//       </div>
+
+//       <div className="main">
+//         <div className="topbar">
+//           <div className="left">
+//             <h3>BOOKS</h3>
+//             <p>List of books</p>
+//           </div>
+//           <form className="input__box bg__accent" tabindex="0">
+//             <input
+//               type="text"
+//               placeholder="Search books...."
+//               value={query.title}
+//               onChange={(e) => {
+//                 setQuery({
+//                   ...query,
+//                   title: e.target.value,
+//                 });
+//               }}
+//             />
+//             <AiOutlineSearch />
+//           </form>
+//         </div>
+
+//         <section className="books__section">
+//           <div className="card__wrapper">
+//             {booksData?.books.length !== 0 ? (
+//               booksData?.books?.map((book) => {
+//                 return (
+//                   <div className="card bg__accent">
+//                     <img
+//                       src={
+//                         book?.imagePath
+//                           ? `${BASE_URL}/${book?.imagePath.replace(/\\/g, "/")}`
+//                           : defaultCover
+//                       }
+//                       alt="Book Image Not Found"
+//                     />
+//                     <div className="content">
+//                       <h5>{book?.title}</h5>
+//                       <p>By {book?.author}</p>
+//                       <Stars rating={book?.rating} />
+//                       <p>
+//                         {book?.totalReviews} Reviews | {book?.rating} out of 5
+//                       </p>
+//                       <div className="action">
+//                         <Link
+//                           className="btn btn__secondary"
+//                           to={`/books/${book?._id}`}
+//                         >
+//                           View Details
+//                         </Link>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 );
+//               })
+//             ) : (
+//               <h1 style={{ margin: "20px auto" }}>Book Not Found</h1>
+//             )}
+//           </div>
+//           <Pagination
+//             currentPage={currentPage}
+//             data={booksData}
+//             setCurrentPage={setCurrentPage}
+//           />
+//         </section>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Books;
+
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./books.scss";
@@ -13,8 +184,9 @@ import { Pagination } from "../../components";
 
 const Books = () => {
   const [isFirstRender, setIsFirstRender] = useState(true);
-  const [categories, setCategories] = useState(null);
+  const [categories, setCategories] = useState([]);
   const [booksData, setBooksData] = useState(null);
+
   const [query, setQuery] = useState({
     ISBN: "",
     title: "",
@@ -22,17 +194,24 @@ const Books = () => {
     category: "",
     almirah: "",
   });
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const fetchData = async () => {
     try {
-      const { data: books } = await getAllBooks(query, currentPage, 10);
+      const { data: books } = await getAllBooks(
+        query,
+        currentPage,
+        10
+      );
+
       const { data: categoriesData } =
         await getAllCategoriesWithoutPagination();
+
       setBooksData(books);
-      setCategories(categoriesData?.categories);
-      // console.log(categoriesData);
+      setCategories(categoriesData?.categories || []);
     } catch (error) {
+      console.log(error);
     }
   };
 
@@ -41,8 +220,9 @@ const Books = () => {
       setIsFirstRender(false);
       return;
     }
+
     setCurrentPage(1);
-    // debouncing
+
     const handler = setTimeout(() => {
       fetchData();
     }, 1000);
@@ -58,9 +238,11 @@ const Books = () => {
 
   return (
     <div className="books__wrapper bg text__color">
+      {/* Sidebar */}
       <div className="sidebar__wrapper bg__accent">
         <div className="sidebar__content">
           <h3>Categories</h3>
+
           <ul>
             <li>
               <label>
@@ -68,41 +250,49 @@ const Books = () => {
                   type="checkbox"
                   checked={query?.category === ""}
                   onChange={() => {
-                    setQuery({ ...query, category: "" });
+                    setQuery({
+                      ...query,
+                      category: "",
+                    });
                   }}
                 />
                 All
               </label>
             </li>
 
-            {categories?.map((i) => {
-              return (
-                <li key={i?._id}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="category"
-                      checked={query.category === i?._id}
-                      onChange={() => {
-                        setQuery({ ...query, category: i?._id });
-                      }}
-                    />
-                    {i?.name}
-                  </label>
-                </li>
-              );
-            })}
+            {categories?.map((i) => (
+              <li key={i?._id}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={query.category === i?._id}
+                    onChange={() => {
+                      setQuery({
+                        ...query,
+                        category: i?._id,
+                      });
+                    }}
+                  />
+                  {i?.name}
+                </label>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
 
+      {/* Main */}
       <div className="main">
         <div className="topbar">
           <div className="left">
             <h3>BOOKS</h3>
             <p>List of books</p>
           </div>
-          <form className="input__box bg__accent" tabindex="0">
+
+          <form
+            className="input__box bg__accent"
+            tabIndex="0"
+          >
             <input
               type="text"
               placeholder="Search books...."
@@ -114,31 +304,50 @@ const Books = () => {
                 });
               }}
             />
+
             <AiOutlineSearch />
           </form>
         </div>
 
+        {/* Books Section */}
         <section className="books__section">
           <div className="card__wrapper">
-            {booksData?.books.length !== 0 ? (
-              booksData?.books?.map((book) => {
+            {booksData?.books?.length > 0 ? (
+              booksData.books.map((book) => {
+                const imageUrl = book?.imagePath
+                  ? `${BASE_URL}/${book.imagePath.replace(
+                      /\\/g,
+                      "/"
+                    )}`
+                  : defaultCover;
+
+                console.log(imageUrl);
+
                 return (
-                  <div className="card bg__accent">
+                  <div
+                    className="card bg__accent"
+                    key={book?._id}
+                  >
                     <img
-                      src={
-                        book?.imagePath
-                          ? `${BASE_URL}/${book?.imagePath}`
-                          : defaultCover
-                      }
-                      alt="Book Image Not Found"
+                      src={imageUrl}
+                      alt={book?.title}
+                      onError={(e) => {
+                        e.target.src = defaultCover;
+                      }}
                     />
+
                     <div className="content">
                       <h5>{book?.title}</h5>
+
                       <p>By {book?.author}</p>
+
                       <Stars rating={book?.rating} />
+
                       <p>
-                        {book?.totalReviews} Reviews | {book?.rating} out of 5
+                        {book?.totalReviews} Reviews |{" "}
+                        {book?.rating} out of 5
                       </p>
+
                       <div className="action">
                         <Link
                           className="btn btn__secondary"
@@ -152,9 +361,12 @@ const Books = () => {
                 );
               })
             ) : (
-              <h1 style={{ margin: "20px auto" }}>Book Not Found</h1>
+              <h1 style={{ margin: "20px auto" }}>
+                Book Not Found
+              </h1>
             )}
           </div>
+
           <Pagination
             currentPage={currentPage}
             data={booksData}
